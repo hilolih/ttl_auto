@@ -1,6 +1,5 @@
-# TtlAuto
-
-TODO: Write a gem description
+# ttl_auto
+make teraterm macro automatically with configuration file(yaml).
 
 ## Installation
 
