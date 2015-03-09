@@ -19,8 +19,43 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+you write server definitions into yaml file.
 
+```yaml
+- name: server_name
+  category: servers_genre/sub_genre
+  description: this server is ...
+  define:
+    - method: new
+      server: 192.168.1.12
+      user: username
+      pass: password
+      encoding: UTF-8
+      protocol: telnet
+      prompt: '>'
+      command: 
+        - bash
+        - alias ls='#39'ls --colors -F'#39'
+        - call_templates: for_solaris
+        - cd /opt
+```
+
+And then, build teraterm macro files.
+
+```ruby
+gem "ttl_auto"
+
+servers = TtlAuto.new do |ttl|
+  ttl.definitions    = "./servers.yml"
+  ttl.command_macros = "./macros.yml"
+  ttl.rootdir        = "./out"
+  ttl.private_keydir = "./pem"
+  ttl.inidir         = "./ini"
+end
+
+servers.out! #=> output teraterm macro named by out/servers_genre/sub_genre/server_name.ttl in case of yaml file
+
+```
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/ttl_auto/fork )
