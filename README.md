@@ -45,7 +45,7 @@ And then, build teraterm macro files.
 ```ruby
 gem "ttl_auto"
 
-servers = TtlAuto.new do |ttl|
+servers = TtlAuto::Macro.new do |ttl|
   ttl.definitions    = "./servers.yml"
   ttl.command_macros = "./macros.yml"
   ttl.rootdir        = "./out"
