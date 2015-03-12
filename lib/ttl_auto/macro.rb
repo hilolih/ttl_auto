@@ -13,8 +13,8 @@ module TtlAuto
     end
 
     def out!
-      
-binding.pry
+      servers = TtlAuto::Yaml.new @definitions 
+      binding.pry
     end
-
+  end
 end
