@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["hilolih@gmail.com"]
   spec.summary       = %q{automatically teraterm macros}
   spec.description   = %q{make teraterm macros automatically with configuration file(yaml).}
-  spec.homepage      = "https://github.com/hilolih/ttl_auto"
+  spec.homepage      = "https://github.com/hilolih/ttlauto"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
