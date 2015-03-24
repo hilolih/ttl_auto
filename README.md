@@ -1,4 +1,4 @@
-# ttl_auto
+# ttlauto
 make teraterm macro automatically with configuration file(yaml).
 
 ## Installation
@@ -6,7 +6,7 @@ make teraterm macro automatically with configuration file(yaml).
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ttl_auto'
+gem 'ttlauto'
 ```
 
 And then execute:
@@ -15,7 +15,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ttl_auto
+    $ gem install ttlauto
 
 ## Usage
 
@@ -40,20 +40,29 @@ you write server definitions into yaml file.
         - cd /opt
 ```
 
+Also, you write command macros into yaml file if you need.
+```yaml
+- name: for_solaris
+  type: command_macro
+  commands:
+    - export HISTCONTROL=ignoreboth
+    - set -o vi
+    - alias vi='#39'vi -u NONE -N "+set incsearch" "+set hlsearch" "+syntax on"'#39'
+    - alias grep=ggrep
+    - alias tail=gtail
+```
+
 And then, build teraterm macro files.
 
 ```ruby
 gem "ttl_auto"
 
-servers = TtlAuto::Macro.new do |ttl|
-  ttl.definitions    = "./servers.yml"
-  ttl.command_macros = "./macros.yml"
-  ttl.rootdir        = "./out"
-  ttl.private_keydir = "./pem"
-  ttl.inidir         = "./ini"
-end
+TtlAuto::Exe.new(open("servers.yml"), open("macros.yml")).run
 
-servers.out! #=> output teraterm macro named by out/servers_genre/sub_genre/server_name.ttl in case of yaml file
+ # output teraterm macro named by 
+ # out/servers_genre/sub_genre/server_name.ttl in case of yaml file
+
+servers.out! 
 
 ```
 ## Contributing
