@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'ttlauto/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ttl_auto"
+  spec.name          = "ttlauto"
   spec.version       = TtlAuto::VERSION
   spec.authors       = ["hiroshi shimoda"]
   spec.email         = ["hilolih@gmail.com"]
