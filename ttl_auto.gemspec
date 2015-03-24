@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ttl_auto/version'
+require 'ttlauto/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "ttl_auto"
   spec.version       = TtlAuto::VERSION
   spec.authors       = ["hiroshi shimoda"]
   spec.email         = ["hilolih@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{automatically teraterm macros}
+  spec.description   = %q{make teraterm macros automatically with configuration file(yaml).}
+  spec.homepage      = "https://github.com/hilolih/ttl_auto"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
