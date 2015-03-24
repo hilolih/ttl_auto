@@ -1,0 +1,172 @@
+; ----------------------------------------------------------------
+; teraterm マクロ by ttl_auto
+; 
+; 作成日時 ： <%=timestamp%>
+;
+; Hiroshi Shimoda
+;
+;
+; ※ このマクロは自動生成されています。
+;
+; name     : <%=record['category']%>/<%=record['name']%>.ttl
+; memo     : <%=description%>
+;
+;
+; ----------------------------------------------------------------
+script_dir = ''
+getdir script_dir
+setdir script_dir
+makepath _Ini script_dir 'macro_term.ini'
+<%# yesno %>
+<%- if record['yesno'] -%>
+yesnobox '<%=record['yesno']['message']%>' '<%=record['yesno']['title']%>' 
+if result goto yes
+end
+:yes
+<%- end -%>
+<%# サーバごとの処理をまわす %>
+<%- record['define'].each_with_index do |d,i| -%>
+  <%- if ( d['method'] == "new" and i.to_i > 0 )-%>
+unlink
+  <%- end -%>
+; ----------------------------------------------
+; サーバ情報 no.<%=i+1%>
+;
+; server   : <%=d['server']%>
+; user     : <%=d['user']%>
+; pass     : <%=d['pass']%>
+; encoding : <%=d['encoding']%>
+; protocol : <%=d['protocol']%>
+; memo     : <%=d['memo']%>
+; command  : <%=d['command'] && d["command"].join("\n;            ")%>
+; method   : <%=d['method'] %>
+;
+; ----------------------------------------------
+_logprompt = ':'
+<%# -----------------------------------------------------%>
+<% if d['method'] == "new" -%>
+_server = '<%=d['server']%>'
+  <%-  case d['protocol'] 
+       when "telnet" then -%>
+; telnet接続
+strconcat _server ':23 /nossh'
+strconcat _server ' /KR='
+strconcat _server '<%=d['encoding']%>'
+strconcat _server ' /KT='
+strconcat _server '<%=d['encoding']%>'
+  <%- if d['ini'] -%>
+strconcat _server ' /F='
+makepath _Ini script_dir '<%=d['ini']%>'
+strconcat _server _Ini
+  <%- end -%>
+; サーバへ接続
+connect _server
+  <%- if d['user'] -%>
+wait _logprompt
+sendln '<%=d["user"]%>'
+  <%- else -%>
+; --- ネットワーク機器等のため、ユーザーはありません ---
+  <%- end -%>
+wait _logprompt
+sendln '<%=d["pass"]%>'
+  <%- when "ssh" then -%>
+; ssh接続
+strconcat _server ':22 /ssh'
+    <%- if d['publickey'] -%>
+makepath _keyfile script_dir '<%=d['publickey']%>'
+strconcat _server ' /auth=publickey'
+strconcat _server ' /keyfile='
+strconcat _server _keyfile
+    <%- else -%>
+strconcat _server ' /auth=password' 
+strconcat _server ' /passwd='
+strconcat _server '<%=d['pass']%>'
+    <%- end -%>
+strconcat _server ' /user=' 
+strconcat _server '<%=d['user']%>'
+strconcat _server ' /KR='
+strconcat _server '<%=d['encoding']%>'
+strconcat _server ' /KT='
+strconcat _server '<%=d['encoding']%>'
+; サーバへ接続
+connect _server
+  <%- end -%>
+<%# ----------------------------------------------------- %>
+<%- else -%>
+wait _prompt
+sendln 'telnet <%=d['server']%>'
+  <%-if d['user']-%>
+wait _logprompt
+sendln '<%=d["user"]%>'
+  <%-else-%>
+; --- ネットワーク機器等のため、ユーザーはありません ---
+  <%-end-%>
+wait _logprompt
+sendln '<%=d["pass"]%>'
+<%- end -%>
+<%# ----------------------------------------------------- -%>
+  <%# プロンプト設定。rootpassがあればroot取得 %>
+  <%- if d['prompt'] -%>
+_prompt = '<%=d['prompt']%>'
+  <%- else -%>
+_prompt = '$'
+  <%- end -%>
+  <%- if d['rootpass'] -%>
+wait _prompt
+    <%- if d['su'] -%>
+sendln '<%= d['su'] -%>'
+    <%- else -%>
+sendln 'su -'
+    <%- end -%>
+wait _logprompt
+sendln '<%= d['rootpass'] -%>'
+    <%- if d['rootprompt'] -%>
+_prompt = '<%=d['rootprompt']%>'
+    <%- else -%>
+_prompt = '#'
+    <%- end -%>
+  <%- end -%>
+<%-# ----------------------------------------------------- -%>
+  <%-# 各サーバでのコマンド処理（プロトコルによらず共通）-%>
+  <%- if d['command'] -%>
+    <%-  d['command'].each do |cmd| -%>
+      <%- if cmd.class == Hash -%>
+        <%-# ----------------------------------------------------- -%>
+        <%-# 繰り返し処理 -%>
+        <%- if cmd.has_key?("do") -%>
+
+do
+          <%- cmd["do"].each do |do_cmd| -%>
+            <%- if do_cmd.class == Hash -%>
+              <%- do_cmd.each_pair do |k, v| -%>
+  <%= k %> <%= v %>
+              <%- end -%>
+            <%- else -%>
+            <%-# 通常コマンド -%>
+  wait _prompt
+  sendln ' <%=do_cmd%>'
+            <%- end -%>
+          <%- end -%>
+loop
+        <%-# ----------------------------------------------------- -%>
+        <%-# プロンプトの変更 -%>
+        <%- elsif cmd.has_key?("prompt") -%>
+_prompt = '<%=cmd['prompt']%>'
+        <%-# ----------------------------------------------------- -%>
+        <%- else -%>
+          <%- cmd.each_pair do |k, v| -%>
+<%= k %> <%= v %>
+          <%- end -%>
+        <%- end -%>
+      <%- else -%>
+      <%# 通常コマンド %>
+wait _prompt
+sendln ' <%=cmd%>'
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+<%- end -%>
+; マクロとウィンドウを切り離す
+unlink
+end
+
