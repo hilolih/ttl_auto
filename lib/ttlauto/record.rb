@@ -36,6 +36,20 @@ module TtlAuto
       end
     end
 
+    def inifile?
+      @body['define'].any?{|d| d['inifile']}
+    end
+
+    def set_inifile_path
+      @body['define'].each do |d|
+        if d['inifile']
+          ini = "#{INI}\\#{File.basename(d['inifile'])}"
+          d['inifile'] = depth.times.reduce(ini){|n| File.join('..\\', n)}
+          log_info d['inifile']
+        end
+      end
+    end
+
     private
 
     def depth

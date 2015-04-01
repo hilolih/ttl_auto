@@ -16,7 +16,6 @@
 script_dir = ''
 getdir script_dir
 setdir script_dir
-makepath _Ini script_dir 'macro_term.ini'
 <%# yesno %>
 <%- if record['yesno'] -%>
 yesnobox '<%=record['yesno']['message']%>' '<%=record['yesno']['title']%>' 
@@ -54,9 +53,9 @@ strconcat _server ' /KR='
 strconcat _server '<%=d['encoding']%>'
 strconcat _server ' /KT='
 strconcat _server '<%=d['encoding']%>'
-  <%- if d['ini'] -%>
+  <%- if d['inifile'] -%>
 strconcat _server ' /F='
-makepath _Ini script_dir '<%=d['ini']%>'
+makepath _Ini script_dir '<%=d['inifile']%>'
 strconcat _server _Ini
   <%- end -%>
 ; サーバへ接続
@@ -88,6 +87,11 @@ strconcat _server ' /KR='
 strconcat _server '<%=d['encoding']%>'
 strconcat _server ' /KT='
 strconcat _server '<%=d['encoding']%>'
+    <%- if d['inifile'] -%>
+strconcat _server ' /F='
+makepath _Ini script_dir '<%=d['inifile']%>'
+strconcat _server _Ini
+    <%- end -%>
 ; サーバへ接続
 connect _server
   <%- end -%>

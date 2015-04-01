@@ -22,6 +22,10 @@ module TtlAuto
       if rd.keyfile?
         rd.set_keyfile_path
       end
+      # set valid inifile path
+      if rd.inifile?
+        rd.set_inifile_path
+      end
       record = rd.body
       description = rd.description
       FileUtils.mkdir_p @path unless File.exists?(@path)
