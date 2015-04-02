@@ -10,4 +10,5 @@ require 'ttlauto/ttl.rb'
 require 'ttlauto/csvread'
 require 'ttlauto/yamlread'
 require 'ttlauto/ping'
+require 'ttlauto/inifile'
 

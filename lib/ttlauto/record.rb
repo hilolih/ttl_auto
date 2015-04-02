@@ -43,7 +43,7 @@ module TtlAuto
     def set_inifile_path
       @body['define'].each do |d|
         if d['inifile']
-          ini = "#{INI}\\#{File.basename(d['inifile'])}"
+          ini = "#{INI}\\#{inifile_with_protocol(File.basename(d['inifile']), d['protocol'])}"
           d['inifile'] = depth.times.reduce(ini){|n| File.join('..\\', n)}
           log_info d['inifile']
         end
@@ -51,6 +51,14 @@ module TtlAuto
     end
 
     private
+
+    def inifile_with_protocol file, protocol
+      if protocol == "ssh"
+        File.basename(file, '.INI') + "_SSH.INI"
+      elsif protocol == "telnet"
+        File.basename(file, '.INI') + "_TELNET.INI"
+      end
+    end
 
     def depth
       @body['category'].count('/') + 1
