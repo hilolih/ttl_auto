@@ -9,6 +9,7 @@ module TtlAuto
     def initialize record, category, cmd_templates={}
       @path = "#{OUT}/#{category}"
       @record = record
+      @category = category
       @cmd_templates = cmd_templates
     end
 
@@ -20,11 +21,11 @@ module TtlAuto
       end
       # set valid public keyfile path
       if rd.keyfile?
-        rd.set_keyfile_path
+        rd.set_keyfile_path @category
       end
       # set valid inifile path
       if rd.inifile?
-        rd.set_inifile_path
+        rd.set_inifile_path @category
       end
       record = rd.body
       description = rd.description

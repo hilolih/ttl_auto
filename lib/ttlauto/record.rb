@@ -26,11 +26,11 @@ module TtlAuto
       @body['define'].any?{|d| d['publickey']}
     end
 
-    def set_keyfile_path
+    def set_keyfile_path path
       @body['define'].each do |d|
         if d['publickey']
           pem = "#{PEM}/#{File.basename(d['publickey'])}"
-          d['publickey'] = depth.times.reduce(pem){|n| File.join('../', n)}
+          d['publickey'] = depth(path).times.reduce(pem){|n| File.join('../', n)}
           log_info d['publickey']
         end
       end
@@ -40,11 +40,11 @@ module TtlAuto
       @body['define'].any?{|d| d['inifile']}
     end
 
-    def set_inifile_path
+    def set_inifile_path path
       @body['define'].each do |d|
         if d['inifile']
           ini = "#{INI}\\#{inifile_with_protocol(File.basename(d['inifile']), d['protocol'])}"
-          d['inifile'] = depth.times.reduce(ini){|n| File.join('..\\', n)}
+          d['inifile'] = depth(path).times.reduce(ini){|n| File.join('..\\', n)}
           log_info d['inifile']
         end
       end
@@ -60,8 +60,8 @@ module TtlAuto
       end
     end
 
-    def depth
-      @body['category'].count('/') + 1
+    def depth path
+      path.count('/') + 1
     end
 
     def replace_iter obj, target, replace
