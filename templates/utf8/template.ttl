@@ -70,7 +70,12 @@ wait _logprompt
 sendln '<%=d["pass"]%>'
   <%- when "ssh" then -%>
 ; ssh接続
-strconcat _server ':22 /ssh'
+    <%- if d['port'] -%>
+strconcat _server ':<%=d['port']%>'
+    <%- else -%>
+strconcat _server ':22'
+    <%- end -%>
+strconcat _server ' /ssh'
     <%- if d['publickey'] -%>
 makepath _keyfile script_dir '<%=d['publickey']%>'
 strconcat _server ' /auth=publickey'

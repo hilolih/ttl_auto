@@ -31,7 +31,7 @@ module TtlAuto
         if d['publickey']
           pem = "#{PEM}/#{File.basename(d['publickey'])}"
           d['publickey'] = depth(path).times.reduce(pem){|n| File.join('../', n)}
-          log_info d['publickey']
+          log_debug d['publickey']
         end
       end
     end
@@ -45,7 +45,7 @@ module TtlAuto
         if d['inifile']
           ini = "#{INI}\\#{inifile_with_protocol(File.basename(d['inifile']), d['protocol'])}"
           d['inifile'] = depth(path).times.reduce(ini){|n| File.join('..\\', n)}
-          log_info d['inifile']
+          log_debug d['inifile']
         end
       end
     end
