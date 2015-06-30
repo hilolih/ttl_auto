@@ -114,12 +114,21 @@ wait _logprompt
 sendln '<%=d["pass"]%>'
 <%- end -%>
 <%# ----------------------------------------------------- -%>
-  <%# プロンプト設定。rootpassがあればroot取得 %>
+  <%# プロンプト設定。%>
   <%- if d['prompt'] -%>
 _prompt = '<%=d['prompt']%>'
   <%- else -%>
 _prompt = '$'
   <%- end -%>
+<%# ----------------------------------------------------- -%>
+  <%# timeoutがあればTMOUTにタイムアウト値を設定。-%>
+  <%# 設定時間入力がなければ、シェルが強制ログアウトさせる %>
+  <%# suでTMOUTが引き継がれないので、rootpass指定の場合は２回exportが必要 %>
+  <%- if d['timeout'] -%>
+wait _prompt
+sendln 'export TMOUT=<%=d['timeout']%>'
+  <%- end -%>
+  <%# rootpassがあればroot取得 %>
   <%- if d['rootpass'] -%>
 wait _prompt
     <%- if d['su'] -%>
@@ -136,6 +145,12 @@ _prompt = '#'
     <%- end -%>
   <%- end -%>
 <%-# ----------------------------------------------------- -%>
+  <%# timeoutがあればTMOUTにタイムアウト値を設定。-%>
+  <%- if d['timeout'] -%>
+wait _prompt
+sendln 'export TMOUT=<%=d['timeout']%>'
+  <%- end -%>
+  <%# 設定時間入力がなければ、シェルが強制ログアウトさせる %>
   <%-# 各サーバでのコマンド処理（プロトコルによらず共通）-%>
   <%- if d['command'] -%>
     <%-  d['command'].each do |cmd| -%>
@@ -143,7 +158,6 @@ _prompt = '#'
         <%-# ----------------------------------------------------- -%>
         <%-# 繰り返し処理 -%>
         <%- if cmd.has_key?("do") -%>
-
 do
           <%- cmd["do"].each do |do_cmd| -%>
             <%- if do_cmd.class == Hash -%>
