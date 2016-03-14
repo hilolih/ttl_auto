@@ -7,7 +7,7 @@ module TtlAuto
     attr_reader :path, :record
 
     def initialize record, category, cmd_templates={}
-      @path = "#{OUT}/#{category}"
+      @path = "#{OUT}/#{category}".downcase
       @record = record
       @category = category
       @cmd_templates = cmd_templates
@@ -31,7 +31,7 @@ module TtlAuto
       record = rd.body
       description = rd.description
       FileUtils.mkdir_p @path unless File.exists?(@path)
-      open( "#{@path}/#{record['name']}.ttl", "w:windows-31j"){|f|
+      open( "#{@path}/#{record['name'].downcase}.ttl", "w:windows-31j"){|f|
         f.puts ERB.new(IO.read(TEMPLATE), nil, '-').result(binding)
       }
     end
