@@ -81,6 +81,10 @@ makepath _keyfile script_dir '<%=d['publickey']%>'
 strconcat _server ' /auth=publickey'
 strconcat _server ' /keyfile='
 strconcat _server _keyfile
+    <%- elsif d["auth"] == "challenge" -%>
+strconcat _server ' /auth=challenge' 
+strconcat _server ' /passwd='
+strconcat _server '<%=d['pass']%>'
     <%- else -%>
 strconcat _server ' /auth=password' 
 strconcat _server ' /passwd='
