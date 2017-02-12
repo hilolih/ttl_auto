@@ -15,6 +15,8 @@
 #
 # ----------------------------------------------------------------
 
+<%# サーバごとの処理をまわす %>
+<%- record['define'].each_with_index do |d,i| -%>
 # ログファイルの作成
 set _format_date [clock format [clock seconds] -format {%Y%m%d-%H%M%S}]
 append filename "/tmp/" $_format_date ".log"
@@ -24,7 +26,7 @@ set Server   "<%=d['server']%>"
 set Username "<%=d['user']%>"
 set Password "<%=d['pass']%>"
 set Prompt   "\[#$%>\]"
-set commands { <%=d['command'] && d["command"].join(" ")%> }
+set commands { <%=d['command'] && d["command"].map{|c| "\"#{c}\"" }.join(" ")%> }
 
 set timeout 10
 
@@ -54,5 +56,6 @@ interact
 
 
 exit 0
+<%- end -%>
 
 # vim: set ft=tcl:

@@ -6,7 +6,7 @@ module TtlAuto
     PEM = "lib/pem"
     INI = 'lib\\inifile'
     TEMPLATE = "#{dir}/templates/utf8/template.ttl"
-    EXPECT_OUT = "~/bin/out"
-    EXPECT_TEMPLATE = "#{dir}/templates/utf8/expect.erb"
+    EXPECT_OUT = "/home/hilolih/bin/out"
+    EXPECT_TEMPLATE = "#{dir}/templates/utf8/expect_telnet.erb"
   end
 end

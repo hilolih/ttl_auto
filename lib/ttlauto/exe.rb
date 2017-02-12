@@ -52,6 +52,7 @@ module TtlAuto
       @command_templates ||= {}
       parents( record['category'] ).each do |v|
         Ttl.new( record, v, @command_templates ).bind
+        Expect.new( record, v, @command_templates ).bind
       end
     end
 

@@ -29,7 +29,7 @@ module TtlAuto
                 template = TEMPLATE
             elsif self.class.to_s == "TtlAuto::Expect"
                 encoding = "utf-8"
-                filename = "#{@path}/#{record['name'].downcase}.ttl"
+                filename = "#{@path}/#{record['name'].downcase}"
                 template = EXPECT_TEMPLATE
             end
             #
