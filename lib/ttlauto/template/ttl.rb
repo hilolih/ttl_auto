@@ -21,17 +21,9 @@ module TtlAuto
                 @rd.set_inifile_path @category
             end
             #
-            record = @rd.body
-            description = @rd.description
+            # on TtlAuto::Template
             #
-            # ファイル書き出し処理
-            # description や recordの変数をbindingするため
-            # あえて同じメソッドに。
-            #
-            FileUtils.mkdir_p @path unless File.exists?(@path)
-            open( "#{@path}/#{record['name'].downcase}.ttl", "w:windows-31j"){|f|
-                f.puts ERB.new(IO.read(TEMPLATE), nil, '-').result(binding)
-            }
+            generate_macro()
         end
 
     end
