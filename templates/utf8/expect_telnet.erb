@@ -1,0 +1,58 @@
+#!/usr/bin/expect -f
+# ----------------------------------------------------------------
+# telnet マクロ by ttl_auto
+# 
+# 作成日時 ： <%=timestamp%>
+#
+# Hiroshi Shimoda
+#
+#
+# ※ このマクロは自動生成されています。
+#
+# name     : <%=record['category']%>/<%=record['name']%>.ttl
+# memo     : <%=description%>
+#
+#
+# ----------------------------------------------------------------
+
+# ログファイルの作成
+set _format_date [clock format [clock seconds] -format {%Y%m%d-%H%M%S}]
+append filename "/tmp/" $_format_date ".log"
+log_file $filename
+
+set Server   "<%=d['server']%>"
+set Username "<%=d['user']%>"
+set Password "<%=d['pass']%>"
+set Prompt   "\[#$%>\]"
+set commands { <%=d['command'] && d["command"].join(" ")%> }
+
+set timeout 10
+
+# login 
+spawn  telnet $Server
+expect { 
+    -glob "Username: " {
+        send -- "${Username}\n"
+        exp_continue
+    }
+    -glob "Password: " {
+        send -- "${Password}\n"
+    }
+}
+
+# commandの実行
+foreach c $commands {
+  expect { 
+      -glob "${Prompt}" {
+          send -- "$c\n"
+      }
+  }
+}
+
+# シェルに標準入出力を渡す
+interact
+
+
+exit 0
+
+# vim: set ft=tcl:
