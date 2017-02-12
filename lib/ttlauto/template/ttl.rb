@@ -8,6 +8,11 @@ module TtlAuto
     class Ttl < Template
         attr_reader :path, :record
 
+        def initialize record, category, cmd_templates={}
+            super(record, category, cmd_templates)
+            @path = "#{OUT}/#{category}".downcase
+        end
+
         def bind
             unless @cmd_templates.empty?
                 @rd.replace_macro @cmd_templates
@@ -22,6 +27,7 @@ module TtlAuto
             end
             #
             # on TtlAuto::Template
+            # ファイルへの書き出し
             #
             generate_macro()
         end
