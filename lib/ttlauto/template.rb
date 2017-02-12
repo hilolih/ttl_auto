@@ -26,16 +26,18 @@ module TtlAuto
             if self.class.to_s == "TtlAuto::Ttl"
                 encoding = "windows-31j"
                 filename = "#{@path}/#{record['name'].downcase}.ttl"
+                template = TEMPLATE
             elsif self.class.to_s == "TtlAuto::Expect"
                 encoding = "utf-8"
                 filename = "#{@path}/#{record['name'].downcase}.ttl"
+                template = EXPECT_TEMPLATE
             end
             #
             # ファイル書き出し処理
             #
             FileUtils.mkdir_p @path unless File.exists?(@path)
-            open( filename, "w:windows-31j"){|f|
-                f.puts ERB.new(IO.read(TEMPLATE), nil, '-').result(binding)
+            open( filename, "w:#{encoding}"){|f|
+                f.puts ERB.new(IO.read(template), nil, '-').result(binding)
             }
         end
 
