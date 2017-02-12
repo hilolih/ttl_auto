@@ -1,17 +1,12 @@
 # -*- encoding: utf-8 -*-
-require 'erb'
+#
+# TtlAuto::Ttl
+#
+# erbを使って、ttlマクロを生成する
+#
 module TtlAuto
   class Ttl < Template
-    include Constant
-    include TtlAuto::Log
     attr_reader :path, :record
-
-    def initialize record, category, cmd_templates={}
-      @path = "#{OUT}/#{category}".downcase
-      @record = record
-      @category = category
-      @cmd_templates = cmd_templates
-    end
 
     def bind
       rd = TtlAuto::Record.new(@record)
@@ -34,12 +29,6 @@ module TtlAuto
       open( "#{@path}/#{record['name'].downcase}.ttl", "w:windows-31j"){|f|
         f.puts ERB.new(IO.read(TEMPLATE), nil, '-').result(binding)
       }
-    end
-
-    private
-
-    def timestamp
-      Time.now.strftime('%Y/%m/%d %H:%M:%S')
     end
 
   end

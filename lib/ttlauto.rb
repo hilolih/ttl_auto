@@ -12,4 +12,5 @@ require 'ttlauto/ping'
 require 'ttlauto/inifile'
 require 'ttlauto/template'
 require 'ttlauto/template/ttl'
+require 'ttlauto/template/expect'
 
