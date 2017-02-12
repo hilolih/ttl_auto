@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'erb'
 module TtlAuto
-  class Ttl
+  class Ttl < Template
     include Constant
     include TtlAuto::Log
     attr_reader :path, :record
